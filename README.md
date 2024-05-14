@@ -198,3 +198,31 @@ final onSaleSelector = createSelector1(
   },
 );
 ```
+
+### Selectors with arguments
+
+To create a selector which takes arguments, you have a few options. First, you can write a fuction that creates a selector. Let's say you wanted to make the affordable products selector configurable:
+
+```dart
+Selector<AppState, List<Product>> createAffordableProductsSelector(double price) {
+  return createSelector1(
+    productsSelector,
+      (products) => products.where((product) => product.price < price),
+    );
+}
+
+// Usage
+final affordableProductsSelector = createAffordableProductsSelector(10.00);
+final affordableProducts = affordableProductsSelector(appState);
+```
+
+The other option: Although a selector only takes in 1 parameter, that parameter can be anything you want. It can be a class that holds multiple values, or a Dart 3 record.
+
+```dart
+typedef Params = (AppState state, double price);
+
+final affordableProductsSelector = createSelector1<Params, (List<Product>, double), List<Product>>(
+    (params) => (productsSelector(params.$2), params.$2),
+    (result) => result.$1.where((product) => product.price < result.$2),
+);
+```
