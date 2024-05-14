@@ -222,7 +222,7 @@ The other option: Although a selector only takes in 1 parameter, that parameter 
 typedef Params = (AppState state, double price);
 
 final affordableProductsSelector = createSelector1<Params, (List<Product>, double), List<Product>>(
-    (params) => (productsSelector(params.$2), params.$2),
+    (params) => (productsSelector(params.$1), params.$2),
     (result) => result.$1.where((product) => product.price < result.$2),
 );
 ```
